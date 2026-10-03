@@ -151,13 +151,14 @@
     <script type="module">
         // Firebase設定情報（※ご自身の情報に書き換えてください）
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+  apiKey: "AIzaSyDTNsa3f5_7JTOOugzcaKKr4gbJQhPYSiQ",
+  authDomain: "chat-system-dd395.firebaseapp.com",
+  projectId: "chat-system-dd395",
+  storageBucket: "chat-system-dd395.firebasestorage.app",
+  messagingSenderId: "349709910759",
+  appId: "1:349709910759:web:93ae4d7adb4ce3a6d79842",
+  measurementId: "G-EJD9S81CZX"
+};
 
         // ⚠️他人に合言葉や処理を解析されないよう、以下を難読化（暗号化）しています
         var _0x5350=["\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x67\x73\x74\x61\x74\x69\x63\x2e\x63\x6f\x6d\x2f\x66\x69\x72\x65\x62\x61\x73\x65\x6a\x73\x2f\x31\x30\x2e\x38\x2e\x30\x2f\x66\x69\x72\x65\x62\x61\x73\x2d\x61\x70\x70\x2e\x6a\x73","\x68\x74\x74\x70\x73\x3a\x2f\x2f\x77\x77\x77\x2e\x67\x73\x74\x61\x74\x69\x63\x2e\x63\x6f\x6d\x2f\x66\x69\x72\x65\x62\x61\x73\x65\x6a\x73\x2f\x31\x30\x2e\x38\x2e\x30\x2f\x66\x69\x72\x65\x62\x61\x73\x2d\x66\x69\x72\x65\x73\x74\x6f\x72\x65\x2e\x6a\x73"];const[{initializeApp},{getFirestore,collection,addDoc,query,orderBy,onSnapshot,serverTimestamp}]=await Promise.all([import(_0x5350[0]),import(_0x5350[1])]);const SECRET_WORD=atob("Q1RTMDcxOA==");const userInput=prompt("合言葉を入力してください：");if(userInput!==SECRET_WORD){alert("合言葉が違います。アクセスできません。");document.body.innerHTML="<h2 style='text-align:center; margin-top:20vh; color:red;'>アクセス権限がありません</h2>";}else{startChat()}function startChat(){const chatContainer=document.getElementById('chatContainer');chatContainer.style.display='flex';const app=initializeApp(firebaseConfig);const db=getFirestore(app);if(!sessionStorage.getItem('userId')){sessionStorage.setItem('userId','user_'+Math.random().toString(36).substring(2,9))}const myUserId=sessionStorage.getItem('userId');const chatMessages=document.getElementById('chatMessages');const chatInput=document.getElementById('chatInput');const sendBtn=document.getElementById('sendBtn');async function sendMessage(){const text=chatInput.value.trim();if(text==='')return;try{await addDoc(collection(db,"messages"),{userId:myUserId,text:text,timestamp:serverTimestamp()});chatInput.value=''}catch(e){console.error("Error:",e)}}const q=query(collection(db,"messages"),orderBy("timestamp","asc"));onSnapshot(q,(querySnapshot)=>{chatMessages.innerHTML='';querySnapshot.forEach((doc)=>{const data=doc.data();if(!data.timestamp)return;const date=data.timestamp.toDate();const hours=String(date.getHours()).padStart(2,'0');const minutes=String(date.getMinutes()).padStart(2,'0');const timeString=`${hours}:${minutes}`;const wrapperDiv=document.createElement('div');wrapperDiv.classList.add('message-wrapper');const messageDiv=document.createElement('div');messageDiv.classList.add('message');messageDiv.textContent=data.text;const timeDiv=document.createElement('div');timeDiv.classList.add('message-time');timeDiv.textContent=timeString;if(data.userId===myUserId){wrapperDiv.classList.add('self');messageDiv.classList.add('self')}else{wrapperDiv.classList.add('other');messageDiv.classList.add('other')}wrapperDiv.appendChild(messageDiv);wrapperDiv.appendChild(timeDiv);chatMessages.appendChild(wrapperDiv)});chatMessages.scrollTop=chatMessages.scrollHeight});sendBtn.addEventListener('click',sendMessage);chatInput.addEventListener('keypress',(e)=>{if(e.key==='Enter')sendMessage()})}
