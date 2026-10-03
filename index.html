@@ -18,7 +18,7 @@
         
         /* チャット全体の容器（コンテナ）*/
         .chat-container {
-            display: none; /* 合言葉が合うまで最初は完全に非表示にします */
+            /*display: none; /* 合言葉が合うまで最初は完全に非表示にします */
             width: 400px;
             height: 600px;
             background: white;
@@ -154,7 +154,7 @@
         import { initializeApp } from "https://gstatic.com";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://gstatic.com";
 
-        // Firebaseプロジェクトの接続情報（★あなたから届いた正しい情報を埋め込み済みです）
+        // Firebaseプロジェクトの接続情報
         const firebaseConfig = {
             apiKey: "AIzaSyDTNsa3f5_7JTOOugzcaKKr4gbJQhPYSiQ",
             authDomain: "://firebaseapp.com",
@@ -169,10 +169,10 @@
         const SECRET_WORD = "CTS0718";
         const userInput = prompt("合言葉を入力してください：");
 
-        if (userInput !== SECRET_WORD) {
+        /*if (userInput !== SECRET_WORD) {
             alert("合言葉が違います。アクセスできません。");
             document.body.innerHTML = "<h2 style='text-align:center; margin-top:20vh; color:red;'>アクセス権限がありません</h2>";
-        } else {
+        } else {*/
             startChat();
         }
 
