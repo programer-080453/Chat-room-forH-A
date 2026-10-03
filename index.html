@@ -15,7 +15,7 @@
 		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
 	</style>
 </head>
-<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
+<body lang="JP" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
 &lt;html lang=&quot;ja&quot;&gt;
 &lt;head&gt;
     &lt;meta charset=&quot;UTF-8&quot;&gt;
@@ -81,13 +81,13 @@
             align-self: flex-end;
             align-items: flex-end;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">相手が送信した発言：左側 </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">相手が送信した発言：左側 </span></font>*/
         .message-wrapper.other {
             align-self: flex-start;
             align-items: flex-start;
         }
 
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">吹き出し（メッセージ本体）の共通デザイン </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">吹き出し（メッセージ本体）の共通デザイン </span></font>*/
         .message {
             padding: 10px 14px;
             border-radius: 8px;
@@ -95,18 +95,18 @@
             word-wrap: break-word;
             width: fit-content;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">自分の吹き出し（薄緑） </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">自分の吹き出し（薄緑） </span></font>*/
         .message.self {
             background-color: #d9fdd3;
             border-top-right-radius: 0;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">相手の吹き出し（白） </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">相手の吹き出し（白） </span></font>*/
         .message.other {
             background-color: #ffffff;
             border-top-left-radius: 0;
         }
 
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">メッセージの下に表示される時間 </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">メッセージの下に表示される時間 </span></font>*/
         .message-time {
             font-size: 0.75em;
             color: #667781;
@@ -114,7 +114,7 @@
             padding: 0 4px;
         }
 
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">画面最下部の入力エリア </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">画面最下部の入力エリア </span></font>*/
         .chat-input-area {
             display: flex;
             align-items: center;
@@ -125,7 +125,7 @@
             height: 60px;
             width: 100%;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">テキスト入力欄 </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">テキスト入力欄 </span></font>*/
         .chat-input {
             flex: 1;
             height: 40px;        
@@ -136,7 +136,7 @@
             box-sizing: border-box; 
             font-size: 0.95em;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">送信ボタン（丸い紙飛行機アイコン） </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">送信ボタン（丸い紙飛行機アイコン） </span></font>*/
         .send-btn {
             background-color: #00a884;
             color: white;
@@ -157,21 +157,21 @@
 &lt;/head&gt;
 &lt;body&gt;
     &lt;div class=&quot;chat-container&quot; id=&quot;chatContainer&quot;&gt;
-        &lt;div class=&quot;chat-header&quot;&gt;1v1 <font face="NSimSun, monospace"><span lang="zh-CN">リアルタイムトーク</span></font>&lt;/div&gt;
+        &lt;div class=&quot;chat-header&quot;&gt;1v1 <font face="NSimSun, monospace"><span lang="JP">リアルタイムトーク</span></font>&lt;/div&gt;
         &lt;div class=&quot;chat-messages&quot; id=&quot;chatMessages&quot;&gt;&lt;/div&gt;
         &lt;div class=&quot;chat-input-area&quot;&gt;
-            &lt;input type=&quot;text&quot; id=&quot;chatInput&quot; class=&quot;chat-input&quot; placeholder=&quot;<font face="NSimSun, monospace"><span lang="zh-CN">メッセージを入力</span></font>...&quot;&gt;
+            &lt;input type=&quot;text&quot; id=&quot;chatInput&quot; class=&quot;chat-input&quot; placeholder=&quot;<font face="NSimSun, monospace"><span lang="JP">メッセージを入力</span></font>...&quot;&gt;
             &lt;button id=&quot;sendBtn&quot; class=&quot;send-btn&quot;&gt;➤&lt;/button&gt;
         &lt;/div&gt;
     &lt;/div&gt;
 
-    &lt;!-- JavaScript<font face="NSimSun, monospace"><span lang="zh-CN">（ロジック・通信処理）</span></font>--&gt;
+    &lt;!-- JavaScript<font face="NSimSun, monospace"><span lang="JP">（ロジック・通信処理）</span></font>--&gt;
     &lt;script type=&quot;module&quot;&gt;
-        // ★<font face="NSimSun, monospace"><span lang="zh-CN">修正：動かなくなっていた原因の</span></font>URL<font face="NSimSun, monospace"><span lang="zh-CN">を、正しい公式</span></font>URL<font face="NSimSun, monospace"><span lang="zh-CN">に直しました</span></font>
+        // ★<font face="NSimSun, monospace"><span lang="JP">修正：動かなくなっていた原因の</span></font>URL<font face="NSimSun, monospace"><span lang="JP">を、正しい公式</span></font>URL<font face="NSimSun, monospace"><span lang="JP">に直しました</span></font>
         import { initializeApp } from &quot;https://gstatic.com&quot;;
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from &quot;https://gstatic.com&quot;;
 
-        // Firebase<font face="NSimSun, monospace"><span lang="zh-CN">プロジェクトの接続情報（※ご自身の情報に書き換えてください）</span></font>
+        // Firebase<font face="NSimSun, monospace"><span lang="JP">プロジェクトの接続情報（※ご自身の情報に書き換えてください）</span></font>
         const firebaseConfig = {
   apiKey: &quot;AIzaSyDTNsa3f5_7JTOOugzcaKKr4gbJQhPYSiQ&quot;,
   authDomain: &quot;chat-system-dd395.firebaseapp.com&quot;,
@@ -182,13 +182,13 @@
   measurementId: &quot;G-EJD9S81CZX&quot;
 };
 
-        // <font face="NSimSun, monospace"><span lang="zh-CN">セキュリティ</span></font>(<font face="NSimSun, monospace"><span lang="zh-CN">合言葉</span></font>)
+        // <font face="NSimSun, monospace"><span lang="JP">セキュリティ</span></font>(<font face="NSimSun, monospace"><span lang="JP">合言葉</span></font>)
         const SECRET_WORD = &quot;CTS0718&quot;;
-        const userInput = prompt(&quot;<font face="NSimSun, monospace"><span lang="zh-CN">合言葉を入力してください：</span></font>&quot;);
+        const userInput = prompt(&quot;<font face="NSimSun, monospace"><span lang="JP">合言葉を入力してください：</span></font>&quot;);
 
         if (userInput !== SECRET_WORD) {
-            alert(&quot;<font face="NSimSun, monospace"><span lang="zh-CN">合言葉が違います。アクセスできません。</span></font>&quot;);
-            document.body.innerHTML = &quot;&lt;h2 style='text-align:center; margin-top:20vh; color:red;'&gt;<font face="NSimSun, monospace"><span lang="zh-CN">アクセス権限がありません</span></font>&lt;/h2&gt;&quot;;
+            alert(&quot;<font face="NSimSun, monospace"><span lang="JP">合言葉が違います。アクセスできません。</span></font>&quot;);
+            document.body.innerHTML = &quot;&lt;h2 style='text-align:center; margin-top:20vh; color:red;'&gt;<font face="NSimSun, monospace"><span lang="JP">アクセス権限がありません</span></font>&lt;/h2&gt;&quot;;
         } else {
             startChat();
         }
@@ -209,13 +209,13 @@
             const chatInput = document.getElementById('chatInput');
             const sendBtn = document.getElementById('sendBtn');
 
-            // <font face="NSimSun, monospace"><span lang="zh-CN">送信処理</span></font>
+            // <font face="NSimSun, monospace"><span lang="JP">送信処理</span></font>
             async function sendMessage() {
                 const text = chatInput.value.trim();
                 if (text === '') return;
 
                 try {
-                    // ★<font face="NSimSun, monospace"><span lang="zh-CN">追加：対策</span></font>A<font face="NSimSun, monospace"><span lang="zh-CN">（セキュリティルール）に対応するため、合言葉のデータも一緒に送信します</span></font>
+                    // ★<font face="NSimSun, monospace"><span lang="JP">追加：対策</span></font>A<font face="NSimSun, monospace"><span lang="JP">（セキュリティルール）に対応するため、合言葉のデータも一緒に送信します</span></font>
                     await addDoc(collection(db, &quot;messages&quot;), {
                         userId: myUserId,
                         text: text,
@@ -224,11 +224,11 @@
                     });
                     chatInput.value = '';
                 } catch (e) {
-                    console.error(&quot;<font face="NSimSun, monospace"><span lang="zh-CN">送信エラーが発生しました</span></font>: &quot;, e);
+                    console.error(&quot;<font face="NSimSun, monospace"><span lang="JP">送信エラーが発生しました</span></font>: &quot;, e);
                 }
             }
 
-            // <font face="NSimSun, monospace"><span lang="zh-CN">受信（リアルタイム監視）処理</span></font>
+            // <font face="NSimSun, monospace"><span lang="JP">受信（リアルタイム監視）処理</span></font>
             const q = query(collection(db, &quot;messages&quot;), orderBy(&quot;timestamp&quot;, &quot;asc&quot;));
 
             onSnapshot(q, (querySnapshot) =&gt; {
