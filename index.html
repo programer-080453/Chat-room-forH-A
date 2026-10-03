@@ -174,7 +174,7 @@
             document.body.innerHTML = "<h2 style='text-align:center; margin-top:20vh; color:red;'>アクセス権限がありません</h2>";
         } else {*/
             startChat();
-        }
+        /*}*/
 
         function startChat() {
             const chatContainer = document.getElementById('chatContainer');
@@ -242,7 +242,7 @@
                         messageDiv.classList.add('self');
                     } else {
                         wrapperDiv.classList.add('other');
-                        wrapperDiv.classList.add('other');
+                        messageDiv.classList.add('other');
                     }
 
                     wrapperDiv.appendChild(messageDiv);
