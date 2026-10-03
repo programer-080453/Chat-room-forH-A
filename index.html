@@ -22,7 +22,7 @@
     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
     &lt;title&gt;<font face="NSimSun, monospace"><span lang="zh-CN">リアルタイムチャットシステム（合言葉付き</span></font>)on Firebase&lt;/title&gt;
     &lt;style&gt;
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">全体のレイアウト・背景設定</span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">全体のレイアウト・背景設定</span></font>*/
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
@@ -33,9 +33,9 @@
             height: 100vh;
         }
         
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">チャット全体の容器（コンテナ）</span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">チャット全体の容器（コンテナ）</span></font>*/
         .chat-container {
-            display: none; /* ★<font face="NSimSun, monospace"><span lang="zh-CN">修正：合言葉が合うまで最初は完全に非表示にします </span></font>*/
+            display: none; /* ★<font face="NSimSun, monospace"><span lang="JP">修正：合言葉が合うまで最初は完全に非表示にします </span></font>*/
             width: 400px;
             height: 600px;
             background: white;
@@ -46,7 +46,7 @@
             position: relative;
         }
         
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">ヘッダー（最上部の緑色のバー） </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">ヘッダー（最上部の緑色のバー） </span></font>*/
         .chat-header {
             background-color: #075e54;
             color: white;
@@ -59,7 +59,7 @@
             align-items: center;
             justify-content: center;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">メッセージ表示エリア（スクロール部分） </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">メッセージ表示エリア（スクロール部分） </span></font>*/
         .chat-messages {
             flex: 1;
             padding: 15px;
@@ -69,14 +69,14 @@
             flex-direction: column;
             gap: 12px;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">メッセージと時間表示のスタイル</span></font>*/
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">吹き出しと時間を縦に並べる外枠 </span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">メッセージと時間表示のスタイル</span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">吹き出しと時間を縦に並べる外枠 </span></font>*/
         .message-wrapper {
             display: flex;
             flex-direction: column;
             max-width: 70%;
         }
-        /* <font face="NSimSun, monospace"><span lang="zh-CN">自分が送信した発言：右側</span></font>*/
+        /* <font face="NSimSun, monospace"><span lang="JP">自分が送信した発言：右側</span></font>*/
         .message-wrapper.self {
             align-self: flex-end;
             align-items: flex-end;
