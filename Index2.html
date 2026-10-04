@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リアルタイムチャットシステム（合言葉付き)on Firebase</title>
+    <style>
+        /* 全体のレイアウト・背景設定*/
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        /* チャット全体の容器（コンテナ）*/
+        .chat-container {
+            /*display: none; /* 合言葉が合うまで最初は完全に非表示にします */
+            width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* ヘッダー（最上部の緑色のバー） */
+        .chat-header {
+            background-color: #075e54;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            height: 50px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* メッセージ表示エリア（スクロール部分） */
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #efeae2;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        /* メッセージと時間表示のスタイル*/
+        /* 吹き出しと時間を縦に並べる外枠 */
+        .message-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+        }
+        /* 自分が送信した発言：右側*/
+        .message-wrapper.self {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+        /* 相手が送信した発言：左側 */
+        .message-wrapper.other {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        /* 吹き出し（メッセージ本体）の共通デザイン */
+        .message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            word-wrap: break-word;
+            width: fit-content;
+        }
+        /* 自分の吹き出し（薄緑） */
+        .message.self {
+            background-color: #d9fdd3;
+            border-top-right-radius: 0;
+        }
+        /* 相手の吹き出し（白） */
+        .message.other {
+            background-color: #ffffff;
+            border-top-left-radius: 0;
+        }
+
+        /* メッセージの下に表示される時間 */
+        .message-time {
+            font-size: 0.75em;
+            color: #667781;
+            margin-top: 2px;
+            padding: 0 4px;
+        }
+
+        /* 画面最下部の入力エリア */
+        .chat-input-area {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #f0f2f5;
+            border-top: 1px solid #e0e0e0;
+            box-sizing: border-box;
+            height: 60px;
+            width: 100%;
+        }
+        /* テキスト入力欄 */
+        .chat-input {
+            flex: 1;
+            height: 40px;        
+            padding: 0 15px;     
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            box-sizing: border-box; 
+            font-size: 0.95em;
+        }
+        /* 送信ボタン（丸い紙飛行機アイコン） */
+        .send-btn {
+            background-color: #00a884;
+            color: white;
+            border: none;
+            padding: 0;         
+            margin-left: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;      
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">1v1 リアルタイムトーク</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" class="chat-input" placeholder="メッセージを入力...">
+            <button id="sendBtn" class="send-btn">➤</button>
+        </div>
+    </div>
+
+    <!-- JavaScript（ロジック・通信処理）-->
+    <script type="module">
+        // ★修正：動かなくなっていた原因のURLを、正しい公式URLに完全に直しました
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDTNsa3f5_7JTOOugzcaKKr4gbJQhPYSiQ",
+  authDomain: "chat-system-dd395.firebaseapp.com",
+  projectId: "chat-system-dd395",
+  storageBucket: "chat-system-dd395.firebasestorage.app",
+  messagingSenderId: "349709910759",
+  appId: "1:349709910759:web:93ae4d7adb4ce3a6d79842",
+  measurementId: "G-EJD9S81CZX"
+};
+      // セキュリティ(合言葉)
+        const SECRET_WORD = "CTS0718";
+        const userInput = prompt("合言葉を入力してください：");
+
+        /*if (userInput !== SECRET_WORD) {
+            alert("合言葉が違います。アクセスできません。");
+            document.body.innerHTML = "<h2 style='text-align:center; margin-top:20vh; color:red;'>アクセス権限がありません</h2>";
+        } else {*/
+            startChat();
+        /*}*/
+
+        function startChat() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.style.display = 'flex';
+
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+
+            if (!sessionStorage.getItem('userId')) {
+                sessionStorage.setItem('userId', 'user_' + Math.random().toString(36).substring(2, 9));
+            }
+            const myUserId = sessionStorage.getItem('userId');
+
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+
+            // 送信処理
+            async function sendMessage() {
+                const text = chatInput.value.trim();
+                if (text === '') return;
+
+                try {
+                    // ★追加：対策A（セキュリティルール）に対応するため、合言葉のデータも一緒に送信します
+                    await addDoc(collection(db, "messages"), {
+                        userId: myUserId,
+                        text: text,
+                        timestamp: serverTimestamp(),
+                        secret: "CTS0718" 
+                    });
+                    chatInput.value = '';
+                } catch (e) {
+                    console.error("送信エラーが発生しました: ", e);
+                }
+            }
+
+            // 受信（リアルタイム監視）処理
+            const q = query(collection(db, "messages"), orderBy("timestamp", "asc"));
+
+            onSnapshot(q, (querySnapshot) => {
+                chatMessages.innerHTML = '';
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    if (!data.timestamp) return;
+
+                    const date = data.timestamp.toDate();                  
+                    const hours = String(date.getHours()).padStart(2, '0'); 
+                    const minutes = String(date.getMinutes()).padStart(2, '0'); 
+                    const timeString = `${hours}:${minutes}`;              
+
+                    const wrapperDiv = document.createElement('div');
+                    wrapperDiv.classList.add('message-wrapper');
+
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('message');
+                    messageDiv.textContent = data.text;
+
+                    const timeDiv = document.createElement('div');
+                    timeDiv.classList.add('message-time');
+                    timeDiv.textContent = timeString;
+
+                    if (data.userId === myUserId) {
+                        wrapperDiv.classList.add('self');
+                        messageDiv.classList.add('self');
+                    } else {
+                        wrapperDiv.classList.add('other');
+                        messageDiv.classList.add('other');
+                    }
+
+                    wrapperDiv.appendChild(messageDiv);
+                    wrapperDiv.appendChild(timeDiv);
+                    chatMessages.appendChild(wrapperDiv);
+                });
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+    </script>
+</body>
+</html>
